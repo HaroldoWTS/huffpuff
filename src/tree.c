@@ -8,7 +8,7 @@ struct list{
 
 typedef struct list list_t;
 
-list_t * list_insert_ordered(list_t * current, huffpuff_tree_t * newt){
+list_t * list_insert_ordered(list_t * current, const huffpuff_tree_t * newt){
 	list_t * newl = NULL;
 	if (current){
 		if (newt->weight < current->tree->weight){
@@ -33,9 +33,9 @@ list_t * list_insert_ordered(list_t * current, huffpuff_tree_t * newt){
 	}
 }
 
-
-list_t * histogram_to_list(huffpuff_histogram_t * h){
-	list_t * ret = NULL;
+//converts a histogram into a ordered linked list of tree nodes
+huffpuff_tree_t * histogram_to_list(huffpuff_histogram_t * h){
+	huffpuff_tree_t * ret = NULL;
 	huffpuff_tree_t * tree = NULL;
 	unsigned int it;
 	for (it = 0; it < 255; it++){

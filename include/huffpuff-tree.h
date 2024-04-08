@@ -10,6 +10,7 @@ typedef enum {
 
 struct huffpuff_tree {
 	huffpuff_tree_type type;
+	huffpuff_tree * next;
 	unsigned int weight;
 	union {
 		unsigned char symbol;
