@@ -1,6 +1,6 @@
 .PHONY: all clean test
 
-CFLAGS=-Iinclude -fanalyzer -Wall -Werror
+CFLAGS=-Iinclude -fanalyzer -g -Wall -Werror
 
 all: bin/huffpuff
 

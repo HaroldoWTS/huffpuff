@@ -5,20 +5,17 @@
 
 int main(){
 	unsigned char * data = (unsigned char *)"n";	
-	huffpuff_histogram_t hh;
-	huffpuff_histogram_t * h = &hh;
-	huffpuff_histogram_clear(h);
-	huffpuff_histogram_fill(h, data, 1);
+	huffpuff_histogram_t * h = huffpuff_histogram_create(data, 1);
 	huffpuff_tree_t * tree = huffpuff_tree_create(h);
 	huffpuff_tree_t * aux = NULL;
 	assert(tree->type == HUFFPUFF_LEAF);
 	assert(tree->weight == 1);	
 
-	huffpuff_histogram_clear(h);
+	huffpuff_histogram_destroy(h);
 	huffpuff_tree_destroy(tree);
 
 	data = (unsigned char *)"ana";
-	huffpuff_histogram_fill(h, data, 3);
+	h = huffpuff_histogram_create(data, 3);
 	tree = huffpuff_tree_create(h);
 	
 	assert(tree->type == HUFFPUFF_BRANCH );
@@ -35,11 +32,11 @@ int main(){
 	assert(aux->node.symbol == 'a');
 	assert(aux->weight == 2);
 	
-	huffpuff_histogram_clear(h);
+	huffpuff_histogram_destroy(h);
 	huffpuff_tree_destroy(tree);
 
 	data = (unsigned char *)"abanana";
-	huffpuff_histogram_fill(h, data, 7);
+	h = huffpuff_histogram_create(data, 7);
 	tree = huffpuff_tree_create(h);
 	assert(tree->type == HUFFPUFF_BRANCH );
 	assert(tree->weight == 7);
