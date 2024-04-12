@@ -1,12 +1,8 @@
 #ifndef HUFFPUFF_H
 #define HUFFPUFF_H
+#include "stdio.h"
 
-huffpuff_t * huffpuff_create();
-
-void huffpuff_destroy(huffpuff_t * hp);
-
-void huffpuff_compress(huffpuff_t * hp, const char * uncompressed_data, size_t input_size);
-void huffpuff_get_compression_header();
-
+int huffpuff_compress(FILE * in, FILE * out);
+int huffpuff_decompress(FILE * in, FILE * out);
 
 #endif

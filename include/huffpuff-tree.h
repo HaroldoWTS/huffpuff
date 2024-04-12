@@ -11,6 +11,7 @@ typedef enum {
 struct huffpuff_tree {
 	huffpuff_tree_type type;
 	struct huffpuff_tree * next;
+	struct huffpuff_tree * parent;
 	unsigned int weight;
 	union {
 		unsigned char symbol;
@@ -20,9 +21,7 @@ struct huffpuff_tree {
 
 typedef struct huffpuff_tree huffpuff_tree_t;
 
-huffpuff_tree_t * huffpuff_tree_create(huffpuff_histogram_t * histogram);
-
-void huffpuff_tree_print(huffpuff_tree_t * tree);
+huffpuff_tree_t * huffpuff_tree_create(unsigned int histogram[]);
 
 void huffpuff_tree_destroy(huffpuff_tree_t * tree);
 

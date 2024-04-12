@@ -5,32 +5,47 @@ CFLAGS=-Iinclude -fanalyzer -g -Wall -Werror
 all: bin/huffpuff
 
 clean:
-	rm -f bin/*
+	rm -rf bin/*
 	rm -f src/*.o
-	rm -f test/*
 	rm -f src/test/*.o
 
-bin/huffpuff: src/huffpuff.c src/libhuffpuff.a
-	$(CC) -I./include src/huffpuff.c -o bin/huffpuff -L./src -lhuffpuff 
+src/histogram.o: src/histogram.c include/huffpuff-histogram.h
 
-src/libhuffpuff.a:
+src/tree.o: src/tree.c include/huffpuff-tree.h include/huffpuff-histogram.h
 
-test: test/histogram test/tree
-	test/histogram
-	test/tree
+bin/huffpuff: src/huffpuff.o src/libhuffpuff.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-test/histogram: src/test/histogram.o src/histogram.o
+src/huffpuff.o: src/huffpuff.c include/huffpuff.h
+
+#Daqui pra frente, tudo relacionado a testes
+
+test: bin/test/histogram bin/test/tree test/decompressed test/test.txt
+	bin/test/histogram
+	bin/test/tree
+	if diff -q test/decompressed test/test.txt
+	then
+		echo "Teste final passou!"
+	else
+		echo "Teste final não passou!"
+	fi
+	
+
+bin/test/histogram: src/test/histogram.o src/histogram.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 src/test/histogram.o: src/test/histogram.c include/huffpuff-histogram.h
 
-src/histogram.o: src/histogram.c include/huffpuff-histogram.h
 
-test/tree: src/test/tree.o src/tree.o src/histogram.o
+bin/test/tree: src/test/tree.o src/tree.o src/histogram.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 src/test/tree.o: src/test/tree.c include/huffpuff-tree.h include/huffpuff-histogram.h
 
-src/tree.o: src/tree.c include/huffpuff-tree.h include/huffpuff-histogram.h
+test/compressed: test/test.txt bin/huffpuff
+	cat $< | bin/huffpuff > $@
 
+test/decompressed: test/compressed bin/huffpuff
+	cat $< | bin/huffpuff -x > $@
 
+	

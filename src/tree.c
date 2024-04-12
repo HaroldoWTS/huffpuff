@@ -14,18 +14,18 @@ huffpuff_tree_t * list_insert_ordered(huffpuff_tree_t * current, huffpuff_tree_t
 }
 
 //converts a histogram into a ordered linked list of tree nodes
-huffpuff_tree_t * histogram_to_list(huffpuff_histogram_t * h){
+huffpuff_tree_t * histogram_to_list(unsigned int h []){
 	huffpuff_tree_t * ret = NULL;
 	huffpuff_tree_t * tree = NULL;
 	unsigned int it;
 	for (it = 0; it < 255; it++){
-		if (h->frequency[it] == 0 ){
+		if (h[it] == 0 ){
 			continue;
 		}
 		tree = malloc(sizeof(huffpuff_tree_t));
 		if (tree){
 			tree->type = HUFFPUFF_LEAF;
-			tree->weight = h->frequency[it];
+			tree->weight = h[it];
 			tree->node.symbol = it;
 			tree->next = NULL;
 			ret = list_insert_ordered(ret, tree);	
@@ -35,7 +35,7 @@ huffpuff_tree_t * histogram_to_list(huffpuff_histogram_t * h){
 }
 
 
-huffpuff_tree_t * huffpuff_tree_create(huffpuff_histogram_t * histogram){
+huffpuff_tree_t * huffpuff_tree_create(usigned int histogram []){
 	huffpuff_tree_t * l = histogram_to_list(histogram);
 	huffpuff_tree_t * newt = NULL;
 	if (l == NULL)
@@ -45,6 +45,7 @@ huffpuff_tree_t * huffpuff_tree_create(huffpuff_histogram_t * histogram){
 			newt = malloc(sizeof(huffpuff_tree_t));
 			if (newt){
 				newt->type = HUFFPUFF_BRANCH;
+				l->parent = l->next->parent = newt;
 				newt->node.branch[0] = l;
 				newt->node.branch[1] = l->next;
 				newt->weight = l->weight + l->next->weight;
