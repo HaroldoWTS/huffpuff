@@ -10,7 +10,7 @@ typedef struct {
 	uint8_t * compressed_data;
 } huffpuff_dom_t;
 
-int huffpuff_dom_from_file(huffpuff_dom_t * dom, FILE * in);
-int huffpuff_dom_to_file(const huffpuff_dom_t * dom, FILE * out);
+int huffpuff_dom_open_from_file(huffpuff_dom_t * dom, FILE * in);
+int huffpuff_dom_save_to_file(const huffpuff_dom_t * dom, FILE * out);
 
 #endif
